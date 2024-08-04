@@ -5,6 +5,8 @@ using UnityEngine;
 using System.Xml;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 public class Program:MonoBehaviour
 {
@@ -80,6 +82,7 @@ public class Program:MonoBehaviour
     /// <returns></returns>
     public string RemoveEncry(string str)
     {
+
         string resukt = "";
         for(int i = 0; i < str.Length; i++)
         {
@@ -113,6 +116,7 @@ public class Program:MonoBehaviour
             }
             resukt += ch;
         }
+
         return resukt;
     }
 

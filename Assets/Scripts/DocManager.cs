@@ -8,10 +8,6 @@ using UnityEngine;
 
 public class DocManager : MonoBehaviour
 {
-    /// <summary>
-    /// 所有字库的路径
-    /// </summary>
-    public List<string> libs=new List<string>();
 
     public TMP_InputField value;
 
@@ -34,10 +30,16 @@ public class DocManager : MonoBehaviour
     /// </summary>
     private void Init()
     {
-
+#if UNITY_EDITOR_WIN
+        datapath=Application.persistentDataPath;
+#endif
+        //检查的是是否存在basepath
         if(!Directory.Exists(basePath))
         {
             DirectoryInfo basedir = Directory.CreateDirectory(basePath);
+        }
+        if(!Directory.Exists(libPath))
+        {
             //字库文件夹
             DirectoryInfo libdir = Directory.CreateDirectory(libPath);
             //将默认字库添加进字库文件夹
@@ -47,20 +49,19 @@ public class DocManager : MonoBehaviour
 
             File.WriteAllText(defaultlib, Program.instance.doc);
             Program.instance.HashInit();
-
-            libs.Add(defaultlib);
-
+        }
+        if(!File.Exists(xmlPath))
+        {
             XmlDocument doc = new XmlDocument();
-            XmlElement root=doc.CreateElement("root");
-            XmlElement value=doc.CreateElement("value");
-            value.InnerText=Program.instance.seed.ToString();
+            XmlElement root = doc.CreateElement("root");
+            XmlElement value = doc.CreateElement("value");
+            value.InnerText = Program.instance.seed.ToString();
             XmlElement lib = doc.CreateElement("lib");
             root.AppendChild(lib);
             root.AppendChild(value);
             doc.AppendChild(root);
             doc.Save(xmlPath);
         }
-
     }
     public void SettingInit()
     {
@@ -97,7 +98,8 @@ public class DocManager : MonoBehaviour
         now.text = "正在使用:" +libname;    
     }
     public static DocManager instance;
-    public static string basePath { get { return Application.persistentDataPath + "/Info"; } }
-    public static string libPath { get { return basePath + "/libs"; } }
+    private static string datapath = "/storage/emulated/0/Download/Liangyu";
+    public static string basePath { get { return  Application.persistentDataPath+ "/Info"; } }
+    public static string libPath { get { return datapath + "/libs"; } set { datapath = value; } }
     public static string xmlPath { get { return basePath + "/Options.xml"; } }
 }

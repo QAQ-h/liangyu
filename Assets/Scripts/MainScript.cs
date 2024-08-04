@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using TMPro;
 using UnityEngine;
 using static UnityEngine.Random;
+using Debug = UnityEngine.Debug;
 
 public class MainScript : MonoBehaviour
 {
@@ -23,10 +25,26 @@ public class MainScript : MonoBehaviour
 
     public void RemoveEncry()
     {
+
+
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        stopwatch.Start();
+
         string str = after.text;
+
         str = Program.instance.RemoveEncry(str);
+
         before.text = str;
+
+        stopwatch.Stop();
+        Debug.Log(stopwatch.ElapsedMilliseconds);
     }
+
+
+
+
+
+
 
     public void CreatTxtLib()
     {
