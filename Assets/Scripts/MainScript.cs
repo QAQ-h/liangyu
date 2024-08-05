@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.Random;
 using Debug = UnityEngine.Debug;
 
@@ -84,7 +85,15 @@ public class MainScript : MonoBehaviour
         DocManager.instance.SettingInit();
     }
 
-
+    public void SetBackGround()
+    {
+        GetResources.instance.callBack = (p) =>
+        {
+            File.Copy(p,BackGround.backgroundpath, true);
+            SceneManager.LoadScene(0);
+        };
+        GetResources.instance.GetPhoto();
+    }
     public void AutoSetting()
     {
         setting.SetActive(!setting.activeSelf);

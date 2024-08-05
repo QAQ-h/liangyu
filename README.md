@@ -1,4 +1,4 @@
-# liangyu
+# 射命良文
 这是一个使用unity开发,可以加密简体中文的apk(仅供娱乐)
 因为制作了Android的适配,就只有.apk了_(:з」∠)_
 
@@ -27,6 +27,12 @@
 字库的位置:
 
 Android端:
-storage/enmulated/0/Android/data/com.DefaultCompany.liangyu/files/Info/libs
-data目录不能被自带的文件管理访问,需要用第三方
-可能会在之后的某个版本把这个目录换到别的地方吧
+storage/enmulate/0/Download/Liangyu/libs
+
+更新:
+
+设置界面:
+
+可自行更换背景图片(.jpg,.png等)
+
+可修改字库目录(修改完毕后会在末尾增加一个"libs")

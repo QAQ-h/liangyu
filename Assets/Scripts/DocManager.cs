@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Xml;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DocManager : MonoBehaviour
 {
@@ -15,15 +17,55 @@ public class DocManager : MonoBehaviour
 
     public GameObject lib;
     public Transform parent;
+
+    public TMP_InputField libpath;
+    
     public void SetValue()
     {
         Program.instance.seed=Convert.ToInt32(value.text);
         Program.instance.SaveSeed();
     }
+
+    public void SetLibPath()
+    {
+        string path=libpath.text;
+        if(!Directory.Exists(path))
+        {
+            libpath.text = libPath;
+            return;
+        }
+        libPath = path;
+        XmlDocument doc= new XmlDocument();
+        doc.Load(xmlPath);
+        doc.DocumentElement.SelectSingleNode("libpath").InnerText = path;
+        doc.Save(xmlPath);
+        SceneManager.LoadScene(0);
+    }
     private void Start()
     {
         instance = this;
         Init();
+        LibPathInit();
+    }
+
+    private void LibPathInit()
+    {
+        if (File.Exists(xmlPath))
+        {
+
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(xmlPath);
+            if(doc.DocumentElement.HasAttribute("libpath"))
+            {
+                libPath = doc.DocumentElement.SelectSingleNode("libpath").InnerText;
+                return;
+            }
+            XmlElement e= doc.CreateElement("libpath");
+            e.InnerText = libPath;
+            doc.DocumentElement.AppendChild(e);
+            doc.Save(xmlPath) ;
+        }
     }
     /// <summary>
     /// 第一次打开程序
@@ -57,6 +99,9 @@ public class DocManager : MonoBehaviour
             XmlElement value = doc.CreateElement("value");
             value.InnerText = Program.instance.seed.ToString();
             XmlElement lib = doc.CreateElement("lib");
+            XmlElement libpath= doc.CreateElement("libpath");
+            libpath.InnerText = libPath;
+            root.AppendChild(libpath);
             root.AppendChild(lib);
             root.AppendChild(value);
             doc.AppendChild(root);
@@ -65,6 +110,7 @@ public class DocManager : MonoBehaviour
     }
     public void SettingInit()
     {
+        libpath.text = libPath;
         value.text = Program.instance.seed.ToString();
 
         for(int i=0;i<parent.childCount;i++)
